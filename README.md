@@ -1,2 +1,2 @@
 # polars-streaming
-Streaming Processing using Polars
+Stream Processing using Polars
