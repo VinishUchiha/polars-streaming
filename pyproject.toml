@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "polars-streaming"
+version = "0.1.0"
+description = "Stream Processing Library using Polars"
+readme = "README.md"
+authors = [{ name = "Vinish M", email = "vinishuchiha@gmail.com" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["polars", "streaming","polars streaming", "stream processing"]
+dependencies = [
+    "polars",
+    "watchdog",
+    "schedule",
+    'tomli; python_version < "3.11"',
+]
+requires-python = ">=3.7"
+
+[project.optional-dependencies]
+kafka = ["confluent-kafka"]
+dev = ["black", "bumpver", "isort", "pip-tools", "pytest"]
+
+[tool.setuptools]
+py-modules = ["polars_streaming"]
+
+[project.urls]
+Homepage = "https://github.com/VinishUchiha/polars-streaming"
+
+[tool.bumpver]
+current_version = "0.1.0"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message = "bump version {old_version} -> {new_version}"
+commit = true
+tag = true
+push = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'current_version = "{version}"','version = "{version}"',
+]
+"polars_streaming/__init__.py" = ["{version}"]

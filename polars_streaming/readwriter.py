@@ -9,19 +9,19 @@ READERS = {'csv': pl.read_csv, 'parquet': pl.read_parquet, 'json': pl.read_json,
 class DataStreamReader():
 
     def __init__(self):
-        self.options = {}
+        self._options = {}
 
     def format(self, source):
         self.source = source
         return self
 
     def option(self, key: str, value):
-        self.options[key] = value
+        self._options[key] = value
         return self
 
     def options(self, options):
         for key, value in options.items():
-            self.options[key] = value
+            self._options[key] = value
         return self
 
     def schema(self, schema):
@@ -39,20 +39,25 @@ class DataStreamReader():
         
 class DataStreamWriter():
     def __init__(self):
-        self.options = {}
+        self._options = {}
 
     def format(self, source):
         self.source = source
         return self
 
     def option(self, key, value):
-        self.options[key] = value
+        self._options[key] = value
         return self
     
     def options(self, options):
         for key, value in options.items():
-            self.options[key] = value
+            self._options[key] = value
         return self
     
     def outputMode(self, mode):
         self.output_mode = mode
+        return self
+
+    def trigger(self, ProcessingTime="1 second"):
+        self.processing_time = ProcessingTime
+        return self

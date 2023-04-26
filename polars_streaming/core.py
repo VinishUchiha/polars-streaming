@@ -1,11 +1,9 @@
-import polars as pl
-from exceptions import FileSourcePathMissingException
-from watcher import Handler
-from watchdog.observers import Observer
-import time
+from fileProcessor import FileProcessor
 from readwriter import DataStreamReader, DataStreamWriter
+from kafkaProcessor import KafkaProcessor
+from exceptions import NotImplementedError
 
-file_sources = ['csv','parquet','json','avro']
+FILE_SOURCES = ['csv','parquet','json','avro']
 
 class StreamProcessor():
 
@@ -18,25 +16,17 @@ class StreamProcessor():
     def writeStream(self) -> DataStreamWriter:
         self.writer = DataStreamWriter()
         return self.writer
+    
+    def preFetchedDF(self):
+        return self.reader.df
 
     def add_transform(self, transforms):
         self.transform = transforms
 
     def start(self):
-        if self.reader.source in file_sources:
-            event_handler = Handler(self.reader.source, self.transform, self.writer.output_mode)
-            observer = Observer()
-            if self.reader.file_source_path:
-                path = self.reader.file_source_path
-            elif 'path' in self.options:
-                path = self.options['path']
-            else:
-                raise FileSourcePathMissingException("file source path not mentioned")
-            observer.schedule(event_handler,path, recursive=True)
-            observer.start()
-            try:
-                while True:
-                    time.sleep(1)
-            except KeyboardInterrupt:
-                observer.stop()
-                observer.join()
+        if self.reader.source in FILE_SOURCES:
+            FileProcessor(self.reader, self.transform, self.writer).start()
+        elif self.reader.source == 'kafka':
+            KafkaProcessor(self.reader, self.transform, self.writer).start()
+        else:
+            raise NotImplementedError(f'Not Implemented ReadStream Source: {self.reader.source}')

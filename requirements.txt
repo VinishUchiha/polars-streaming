@@ -1,0 +1,5 @@
+polars==0.17.9
+schedule==1.2.0
+tomli==2.0.1 ; python_version < "3.11"
+typing-extensions==4.5.0
+watchdog==3.0.0
