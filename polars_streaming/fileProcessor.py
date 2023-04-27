@@ -1,10 +1,10 @@
 from watchdog.events import PatternMatchingEventHandler
 from watchdog.observers import Observer
-from exceptions import FileSourcePathMissingException, FileExtensionNotSupportedException
+from .exceptions import FileSourcePathMissingException, FileExtensionNotSupportedException
 import polars as pl
 import time
 from pathlib import Path
-from utils import _writer, READERS, SUPPORTED_FILE_WRITERS
+from .utils import _writer, READERS, SUPPORTED_FILE_WRITERS
 
 class FileHandler(PatternMatchingEventHandler):
     def __init__(self, reader, transform, writer) -> None:
