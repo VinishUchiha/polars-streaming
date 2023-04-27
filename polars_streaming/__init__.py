@@ -5,5 +5,5 @@ try:
 except ModuleNotFoundError:
     import tomli as tomllib
 
-# Version of the datacx package
+# Version of the polars-streaming package
 __version__ = "0.1.2"
