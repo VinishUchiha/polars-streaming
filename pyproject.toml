@@ -27,9 +27,6 @@ requires-python = ">=3.7"
 kafka = ["confluent-kafka"]
 dev = ["black", "bumpver", "isort", "pip-tools", "pytest"]
 
-[tool.setuptools]
-py-modules = ["polars_streaming"]
-
 [project.urls]
 Homepage = "https://github.com/VinishUchiha/polars-streaming"
 
