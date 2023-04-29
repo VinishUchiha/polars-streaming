@@ -1,7 +1,7 @@
 from .exceptions import ModuleNotFoundException
 
 class ElasticSearch():
-    def __init__(self, host: str, username: str =None, password: str =None, api_key: str = None) -> None:
+    def __init__(self, host: str, index: str, username: str =None, password: str =None, api_key: str = None) -> None:
         try:
             from elasticsearch import Elasticsearch
         except ImportError:
@@ -12,13 +12,14 @@ class ElasticSearch():
             self.es = ElasticSearch([host], api_key=api_key)
         else:
             self.es = ElasticSearch([host])
+        self.index = index
 
     def write_dataframe(self, df, index):
         from elasticsearch.helpers import bulk
         records = df.to_dict()
         actions = [
             {
-                "_index": index,
+                "_index": self.index,
                 "_source": doc
             }
             for doc in records
