@@ -1,4 +1,4 @@
-from .exceptions import ModuleNotFoundException
+from ..exceptions import ModuleNotFoundException
 
 class ElasticSearch():
     def __init__(self, host: str, index: str, username: str =None, password: str =None, api_key: str = None) -> None:
