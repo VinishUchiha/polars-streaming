@@ -26,7 +26,9 @@ pip install -e .
 >>> s.readStream.format('socket').options({'host':'localhost','port':12345}).load()
 
 >>> def transformation(df):
->>>     return df.tail() # Add your transformation code here
+>>>     # Add your transformation code here
+>>>     df = df.sum() # For example purpose, I am calculating the sum.
+>>>     return df # Return the transformed dataframe
 
 >>> s.add_transform(transformation)
 >>> s.writeStream.format('console').trigger('3 seconds')
