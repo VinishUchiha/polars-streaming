@@ -1,6 +1,7 @@
 from .processors.fileProcessor import FileProcessor
 from .readwriter import DataStreamReader, DataStreamWriter
 from .processors.kafkaProcessor import KafkaProcessor
+from .processors.socketProcessor import SocketProcessor
 from .exceptions import NotImplementedError
 
 FILE_SOURCES = ['csv','parquet','json','avro']
@@ -28,5 +29,7 @@ class StreamProcessor():
             FileProcessor(self.reader, self.transform, self.writer).start()
         elif self.reader.source == 'kafka':
             KafkaProcessor(self.reader, self.transform, self.writer).start()
+        elif self.reader.source == 'socket':
+            SocketProcessor(self.reader, self.transform, self.writer).start()
         else:
             raise NotImplementedError(f'Not Implemented ReadStream Source: {self.reader.source}')
