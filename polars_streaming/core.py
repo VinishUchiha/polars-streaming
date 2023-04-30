@@ -1,6 +1,6 @@
-from .fileProcessor import FileProcessor
+from .processors.fileProcessor import FileProcessor
 from .readwriter import DataStreamReader, DataStreamWriter
-from .kafkaProcessor import KafkaProcessor
+from .processors.kafkaProcessor import KafkaProcessor
 from .exceptions import NotImplementedError
 
 FILE_SOURCES = ['csv','parquet','json','avro']
