@@ -17,3 +17,19 @@ Alternatively, you can also clone the latest version from the [repository](https
 ```bash
 pip install -e .
 ```
+
+## Quick tour
+```python
+>>> from polars_streaming import StreamProcessor
+
+>>> s = StreamProcessor()
+>>> s.readStream.format('socket').options({'host':'localhost','port':12345}).load()
+
+>>> def transformation(df):
+>>>     return df.tail() # Add your transformation code here
+
+>>> s.add_transform(transformation)
+>>> s.writeStream.format('console').trigger('3 seconds')
+
+>>> s.start()
+```
