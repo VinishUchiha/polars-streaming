@@ -1,4 +1,4 @@
-from .exceptions import FileExtensionNotSupportedException
+from ..exceptions import FileExtensionNotSupportedException
 import polars as pl
 
 READERS = {'csv': pl.read_csv, 'parquet': pl.read_parquet, 'json': pl.read_json, 'avro': pl.read_avro}

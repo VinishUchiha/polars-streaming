@@ -1,7 +1,7 @@
 import polars as pl
 import schedule
 from .utils import _writer, SUPPORTED_FILE_WRITERS, trigger_time_extracter
-from .exceptions import ModuleNotFoundException
+from ..exceptions import ModuleNotFoundException
 
 options_mapper = {'kafka.bootstrap.servers':'bootstrap.servers',
                 #'subscribe': 'subscribe',

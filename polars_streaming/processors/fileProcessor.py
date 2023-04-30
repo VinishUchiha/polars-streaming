@@ -1,6 +1,6 @@
 from watchdog.events import PatternMatchingEventHandler
 from watchdog.observers import Observer
-from .exceptions import FileSourcePathMissingException, FileExtensionNotSupportedException
+from ..exceptions import FileSourcePathMissingException, FileExtensionNotSupportedException
 import polars as pl
 import time
 from pathlib import Path
