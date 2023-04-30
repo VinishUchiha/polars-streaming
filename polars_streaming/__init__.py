@@ -6,4 +6,4 @@ except ModuleNotFoundError:
     import tomli as tomllib
 
 # Version of the polars-streaming package
-__version__ = "0.1.2"
+__version__ = "0.2.0"
