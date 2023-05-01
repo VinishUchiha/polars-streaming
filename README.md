@@ -35,3 +35,19 @@ pip install -e .
 
 >>> s.start()
 ```
+## Sources
+- Socket
+- File Sources
+  - CSV
+  - JSON
+  - AVRO
+  - PARQUET
+- Kafka
+
+## Sinks
+- Console
+- File Sources
+  - CSV
+  - JSON
+  - AVRO
+  - PARQUET
