@@ -2,6 +2,7 @@ import polars as pl
 import schedule
 from .utils import _writer, SUPPORTED_FILE_WRITERS, trigger_time_extracter
 from ..exceptions import ModuleNotFoundException
+import json
 
 options_mapper = {'kafka.bootstrap.servers':'bootstrap.servers',
                 #'subscribe': 'subscribe',
@@ -48,6 +49,10 @@ class KafkaProcessor():
         self._kafka_option_mapper()
         consumer = Consumer(self.kafka_config)
         topics = self.reader._options['subscribe'].split(',')
+        if 'serializer' in self.reader._options:
+            serializer = self.reader._options['serializer']
+        else:
+            serializer = 'string'
         consumer.subscribe(topics)
         self.mini_batch = []
         ptime = trigger_time_extracter(self.writer.processing_time)
@@ -61,7 +66,10 @@ class KafkaProcessor():
                 if event.error():
                     raise KafkaException(event.error())
                 else:
-                    val = event.value().decode('utf8')
+                    if serializer ==' string':
+                        val = event.value().decode('utf8')
+                    elif serializer == 'json':
+                        val = json.loads(event.value().decode('utf8'))
                     consumer.commit(event)
                 self.mini_batch.append(val)
                 schedule.run_pending()
