@@ -19,6 +19,7 @@ pip install -e .
 ```
 
 ## Quick tour
+### Socket
 ```python
 >>> from polars_streaming import StreamProcessor
 
@@ -32,6 +33,25 @@ pip install -e .
 
 >>> s.add_transform(transformation)
 >>> s.writeStream.format('console').trigger('3 seconds')
+
+>>> s.start()
+```
+### Kafka
+```python
+>>> from polars_streaming import StreamProcessor
+
+>>> s = StreamProcessor()
+>>> s.readStream.format('kafka').options({'kafka.bootstrap.servers':'localhost','subscribe': 'topic_name',
+                                          'startingOffsets': 'earliest',
+                                          'kafka.group.id': 'g1'}).load()
+
+>>> def transformation(df):
+>>>     # Add your transformation code here
+>>>     df = df.sum() # For example purpose, I am calculating the sum.
+>>>     return df # Return the transformed dataframe
+
+>>> s.add_transform(transformation)
+>>> s.writeStream.format('console').trigger('10 seconds')
 
 >>> s.start()
 ```
