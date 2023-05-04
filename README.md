@@ -55,6 +55,23 @@ pip install -e .
 
 >>> s.start()
 ```
+### File Sources
+```python
+>>> from polars_streaming import StreamProcessor
+
+>>> s = StreamProcessor()
+>>> s.readStream.format('csv').load('read_path_of_file_source')
+
+>>> def transformation(df):
+>>>     # Add your transformation code here
+>>>     df = df.sum() # For example purpose, I am calculating the sum.
+>>>     return df # Return the transformed dataframe
+
+>>> s.add_transform(transformation)
+>>> s.writeStream.option('path','write_path').format('avro')
+
+>>> s.start()
+```
 ## Sources
 - Socket
 - File Sources
