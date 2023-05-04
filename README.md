@@ -60,7 +60,7 @@ pip install -e .
 >>> from polars_streaming import StreamProcessor
 
 >>> s = StreamProcessor()
->>> s.readStream.format('csv').load('read_path_of_file_source')
+>>> s.readStream.format('csv').load('read_path_of_file_source') # Reads the csv file from the path once it is created
 
 >>> def transformation(df):
 >>>     # Add your transformation code here
@@ -68,7 +68,7 @@ pip install -e .
 >>>     return df # Return the transformed dataframe
 
 >>> s.add_transform(transformation)
->>> s.writeStream.option('path','write_path').format('avro')
+>>> s.writeStream.option('path','write_path').format('avro') # Write the processed data to the write path in avro format
 
 >>> s.start()
 ```
