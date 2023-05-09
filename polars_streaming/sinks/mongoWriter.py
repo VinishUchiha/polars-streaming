@@ -9,8 +9,10 @@ class MongoWriter():
         self.mdb = MongoClient(conn_str)
         self.collection = collection
         self.database = database
+        self.mongo = self.mdb[self.database][self.collection]
 
     def write_dataframe(self, df):
-        records = df.to_dict()
-        self.mdb[self.database][self.collection].insert_many(records)
+        records = df.to_dicts()
+        if len(records)>0:
+            self.mongo.insert_many(records)
         

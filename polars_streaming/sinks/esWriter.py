@@ -16,7 +16,7 @@ class ESWriter():
 
     def write_dataframe(self, df):
         from elasticsearch.helpers import bulk
-        records = df.to_dict()
+        records = df.to_dicts()
         actions = [
             {
                 "_index": self.index,
