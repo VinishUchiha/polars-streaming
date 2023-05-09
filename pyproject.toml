@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "polars-streaming"
-version = "0.2.0"
+version = "0.3.0"
 description = "Stream Processing Library using Polars"
 readme = "README.md"
 authors = [{ name = "Vinish M", email = "vinishuchiha@gmail.com" }]
@@ -31,7 +31,7 @@ dev = ["black", "bumpver", "isort", "pip-tools", "pytest"]
 Homepage = "https://github.com/VinishUchiha/polars-streaming"
 
 [tool.bumpver]
-current_version = "0.2.0"
+current_version = "0.3.0"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
