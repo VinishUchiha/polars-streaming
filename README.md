@@ -88,3 +88,5 @@ pip install -e .
   - JSON
   - AVRO
   - PARQUET
+- MongoDB
+- ElasticSearch
