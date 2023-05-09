@@ -5,12 +5,14 @@ import polars as pl
 import time
 from pathlib import Path
 from .utils import _writer, READERS, SUPPORTED_FILE_WRITERS
+from ..sinks import sink_utils
 
 class FileHandler(PatternMatchingEventHandler):
-    def __init__(self, reader, transform, writer) -> None:
+    def __init__(self, reader, transform, writer, sink) -> None:
         self.reader = reader
         self.transform = transform
         self.writer = writer
+        self.sink = sink
         PatternMatchingEventHandler.__init__(self, patterns=[f'*.{self.reader.source}'], ignore_directories=True, case_sensitive=False)
 
     def on_created(self, event):
@@ -25,6 +27,8 @@ class FileHandler(PatternMatchingEventHandler):
                 filename = Path(event.src_path).stem
                 fullpath = f"{path}/{filename}.{self.writer.source}"
                 _writer(df.collect(), fullpath, self.writer.source)
+            elif self.writer.source in ['mongo','elasticsearch']:
+                self.sink.write_dataframe(df.collect())
         except Exception as e:
             print(e)
 
@@ -35,7 +39,11 @@ class FileProcessor():
         self.writer = writer
 
     def start(self):
-        event_handler = FileHandler(self.reader, self.transform, self.writer)
+        if self.writer.source in ['mongo','elasticsearch']:
+            sink = sink_utils.sinker(self.writer)
+        else:
+            sink = None
+        event_handler = FileHandler(self.reader, self.transform, self.writer, sink)
         observer = Observer()
         if self.reader.file_source_path:
             path = self.reader.file_source_path

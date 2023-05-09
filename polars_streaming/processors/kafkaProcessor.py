@@ -3,6 +3,7 @@ import schedule
 from .utils import _writer, SUPPORTED_FILE_WRITERS, trigger_time_extracter
 from ..exceptions import ModuleNotFoundException
 import json
+from ..sinks import sink_utils
 
 options_mapper = {'kafka.bootstrap.servers':'bootstrap.servers',
                 #'subscribe': 'subscribe',
@@ -41,6 +42,8 @@ class KafkaProcessor():
             filename = f"batch_{self.batch_count}"
             fullpath = f"{path}/{filename}.{self.writer.source}"
             _writer(df.collect(), fullpath, self.writer.source)
+        elif self.writer.source in ['mongo','elasticsearch']:
+            self.sink.write_dataframe(df.collect())
         self.batch_count+=1
         self.mini_batch.clear()
 
@@ -54,6 +57,8 @@ class KafkaProcessor():
         else:
             serializer = 'string'
         consumer.subscribe(topics)
+        if self.writer.source in ['mongo','elasticsearch']:
+            self.sink = sink_utils.sinker(self.writer)
         self.mini_batch = []
         ptime = trigger_time_extracter(self.writer.processing_time)
         schedule.every(ptime).seconds.do(self.apply_transform, transformation = self.transform)

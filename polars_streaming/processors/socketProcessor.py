@@ -2,6 +2,7 @@ import polars as pl
 import socket
 import schedule
 from .utils import _writer, SUPPORTED_FILE_WRITERS, trigger_time_extracter
+from ..sinks import sink_utils
 
 class SocketProcessor():
     def __init__(self, reader, transform, writer):
@@ -20,6 +21,8 @@ class SocketProcessor():
             filename = f"batch_{self.batch_count}"
             fullpath = f"{path}/{filename}.{self.writer.source}"
             _writer(df.collect(), fullpath, self.writer.source)
+        elif self.writer.source in ['mongo','elasticsearch']:
+            self.sink.write_dataframe(df.collect())
         self.batch_count+=1
         self.mini_batch.clear()
 
@@ -32,6 +35,8 @@ class SocketProcessor():
             buffer = 1024
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((host, port))
+        if self.writer.source in ['mongo','elasticsearch']:
+            self.sink = sink_utils.sinker(self.writer)
         self.mini_batch = []
         ptime = trigger_time_extracter(self.writer.processing_time)
         schedule.every(ptime).seconds.do(self.apply_transform, transformation = self.transform)
